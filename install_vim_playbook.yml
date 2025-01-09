@@ -1,0 +1,12 @@
+---
+
+- name: install a package
+  hosts: all
+
+  tasks:
+  - name: install vim
+    ansible.builtin.yum:
+      name:  vim-enhanced
+      state: present
+    become: yes
+##  become_method: sudo ## default is sudo
