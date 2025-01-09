@@ -1,0 +1,13 @@
+---
+
+- name: install tmux on the localhost
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: install tmux
+      ansible.builtin.yum:
+        name: tmux
+        state: present
+      become: yes
+
