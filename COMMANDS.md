@@ -7,3 +7,8 @@ ansible all -m ping -i inventory
 
 ### send commands to server(s)
 ansible -m command -a id localhost
+
+### run playbook on limited subset of hosts
+ansible-playbook -i inventory.txt  install_nginx_playbook.yml --check -K --limit stapp01
+## below will remove host key checking
+export ANSIBLE_HOST_KEY_CHECKING=False
