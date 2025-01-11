@@ -1,0 +1,14 @@
+---
+
+- name: unarchive files on appservers
+  hosts: all
+
+  tasks:
+  - name: unarchive .zip archive
+    ansible.builtin.unarchive:
+      src: /usr/src/security/xfusion.zip
+      dest: /opt/security/
+      owner: '{{ ansible_user }}'
+      group: '{{ ansible_user }}'
+      mode: 0774
+    become: yes
