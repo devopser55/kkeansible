@@ -1,0 +1,28 @@
+---
+
+- name: create file and symlink
+  hosts: all
+  become: yes
+
+  tasks:
+
+  - name: create directory
+    ansible.builtin.file:
+      path: /var/www/html
+      state: directory
+
+  - name: create symlink
+    ansible.builtin.file:
+      dest: /opt/finance
+      src: /var/www/html
+      state: link
+      force: yes
+
+  - name: create the empty file
+    ansible.builtin.file:
+      path: "/opt/finance/{{ content_filename }}"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      state: touch 
+
+   ## content_filename defined in inventory for each host
