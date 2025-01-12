@@ -1,0 +1,33 @@
+---
+
+- name: install a package
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: install apache
+    ansible.builtin.yum:
+      name: httpd
+      state: present
+#   become: yes
+##  become_method: sudo ## default is sudo
+
+  - name: start apache
+    ansible.builtin.systemd:
+      name: httpd
+      state: started
+      enabled: yes
+
+  - name: create and add content
+    ansible.builtin.blockinfile:
+      path: /var/www/html/index.html
+      create: yes
+      mode: 0655
+      owner: apache
+      group: apache
+      block: |
+        Welcome to XfusionCorp!
+        
+        This is  Nautilus sample file, created using Ansible!
+        
+        Please do not modify this file manually!
