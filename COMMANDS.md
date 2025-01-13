@@ -6,7 +6,8 @@ ansible all -u steve -m ping -i inventory.txt
 ansible all -m ping -i inventory
 
 ### send commands to server(s)
-ansible -m command -a id localhost
+ansible -i inventory -m command -a id localhost
+ansible -i inventory -m command -a "ls -l" localhost
 
 ### run playbook on limited subset of hosts
 ansible-playbook -i inventory.txt  install_nginx_playbook.yml --check -K --limit stapp01
