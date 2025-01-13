@@ -1,0 +1,23 @@
+---
+
+- name: create file and set acls 
+  hosts: all
+  become: yes
+
+  tasks:
+
+  - name: create the empty file
+    ansible.builtin.file:
+      path: "/opt/devops/{{ content_filename }}"
+      #owner: "{{ ansible_user }}"
+      #group: "{{ ansible_user }}"
+      state: touch 
+   ## content_filename and other vars are defined in inventory for each host
+
+  - name: set acl
+    ansible.builtin.acl:
+      path: "/opt/devops/{{ content_filename }}"
+      entity: "{{ ansible_user }}"
+      etype: "{{ etype }}"
+      permissions: "{{ permissions}}"
+      state: present
