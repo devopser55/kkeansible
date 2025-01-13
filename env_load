@@ -1,0 +1,9 @@
+### git pull
+### git clone
+### git config user.name ?
+### git commit
+
+alias gpl='git pull'
+alias clonekkeansible='git clone https://github.com/devopser55/kkeansible.git'
+alias gitconfkkeansible='git config user.name devopser55'
+alias gph='git push'
