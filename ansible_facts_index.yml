@@ -1,0 +1,39 @@
+---
+
+- name: create content and install apache
+  hosts: all
+  become: yes
+
+  tasks:
+
+  - name: create and add content
+    ansible.builtin.blockinfile:
+      path: /root/facts.txt
+      create: yes
+      block: |
+        Ansible managed node architecture is "{{ ansible_architecture }}"
+    tags:
+      - createfile
+
+  - name: install apache
+    ansible.builtin.yum:
+      name: httpd
+      state: present
+    tags:
+      - installapache
+
+  - name: start apache
+    ansible.builtin.systemd:
+      name: httpd
+      state: started
+      enabled: yes
+    tags:
+      - startapache
+
+  - name: copy a file
+    ansible.builtin.copy: 
+      src: /root/facts.txt
+      dest: /var/www/html/index.html
+      remote_src: yes   
+    tags:
+      - copyfile 
