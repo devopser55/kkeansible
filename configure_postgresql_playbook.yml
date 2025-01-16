@@ -1,0 +1,28 @@
+---
+
+  - name: configure postgresql db
+    hosts: all
+    become: yes
+
+
+    tasks:
+
+    - name: install required packageA
+      ansible.builtin.yum:
+        name: python3-psycopg2.x86_64
+        state: present
+
+    - name: create a db user
+      ansible.builtin.postgresql_user:
+        name: kodekloud_gem
+        password: Rc5C9EyvbU
+
+    - name: create a db instance
+      ansible.builtin.postgresql_db:
+        name: kodekloud_db6
+        
+    - name: grant user permissions
+      ansible.builtin.postgresql_user:
+        db: kodekloud_db6
+        name: kodekloud_gem
+        priv: ALL
