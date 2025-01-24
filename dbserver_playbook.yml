@@ -1,0 +1,37 @@
+---
+
+- name: install and configure maria db, create instance and a user
+  hosts: dbserver
+  become: yes
+
+  tasks: 
+  - name: install mariadb server
+    dnf:
+      pkg: mariadb-server
+      state: present
+    tags:
+    - installdb
+ 
+  - name: start mariadb
+    systemd:
+      service: mariadb
+      state: started
+      enabled: yes
+    tags:
+    - startdb
+
+  - name: create a db instance
+    shell: sudo mysql -u root -e "CREATE DATABASE kodekloud_db7;"
+    tags:
+    - createdb
+
+  - name: create a db user
+    ansible.builtin.shell: sudo mysql -u root -e "CREATE USER 'kodekloud_pop'@'%' identified by 'ksH85UJjhb';"
+    tags:
+    - createuser
+
+  - name: grant user permissions 
+    ansible.builtin.shell: sudo mysql -u root -e "GRANT ALL ON kodekloud_db7.* to 'kodekloud_pop'@'%';"
+    tags:
+    - grantpermission
+
