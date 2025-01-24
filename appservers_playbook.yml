@@ -1,0 +1,39 @@
+---
+
+- name: install http,php,php-msql library on all app hosts
+  hosts: appservers
+  become: yes
+
+  tasks:
+  - name: install apache
+    ansible.builtin.dnf:
+      name: 
+        - httpd
+        - php
+        - php-mysqlnd
+      state: present
+    tags:
+    - installapache
+
+  - name: start apache
+    ansible.builtin.systemd:
+      name: httpd
+      state: started
+      enabled: yes
+    tags:
+    - startapache
+
+  - name: update apache config
+    ansible.builtin.lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^Listen'
+      line: Listen 3002
+    tags:
+    - updateapachecfg
+
+  - name: restart apache
+    ansible.builtin.systemd:
+      name: httpd
+      state: restarted
+    tags:
+    - restartapache
