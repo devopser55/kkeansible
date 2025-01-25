@@ -1,0 +1,36 @@
+---
+
+- name: add some users in their respective groups
+  hosts: stapp02
+  become: yes
+  vars_files:
+    - ~/playbooks/data/users.yml
+    - ~/playbooks/data/encrypted_passwords.yml
+  
+  tasks:
+
+    - name: add user groups
+      group:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - admins
+        - developers
+  
+    - name: add admins users
+      user: 
+        name: "{{ item }}"
+        password: "{{ adm_pwd_var }}" 
+        home: /home/"{{ item }}"
+        group: admins
+      loop: "{{ admins }}"
+      tags: addadminsusers
+  
+    - name: add dev users
+      user: 
+        name: "{{ item }}"
+        password: "{{ dev_pwd_var }}" 
+        home: /var/www
+        group: developers
+      loop: "{{ developers }}"
+      tags: adddevusers
