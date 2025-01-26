@@ -21,8 +21,8 @@
       user: 
         name: "{{ item }}"
         password: "{{ adm_pwd_var }}" 
-        home: /home/"{{ item }}"
-        group: admins
+        home: /home/{{ item }}
+        groups: admins,wheel
       loop: "{{ admins }}"
       tags: addadminsusers
   
