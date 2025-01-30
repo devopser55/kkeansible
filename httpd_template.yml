@@ -1,0 +1,44 @@
+---
+
+- name: httpd and php install
+  hosts: stapp02
+  become: yes
+  gather_facts: false
+
+  tasks:
+    - name: install httpd
+      yum:
+        pkg: 
+          - httpd
+          - php 
+        state: present
+      tags: install
+
+    - name: create doc root dir
+      file:
+        path: /var/www/html/myroot
+        state: directory
+      tags: create
+
+    - name: edit httpd conf 
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: 'DocumentRoot "/var/www/html"'
+        line: 'DocumentRoot "/var/www/html/myroot"'
+      tags: edit
+
+    - name: copy template
+      copy:
+        src: ~/playbooks/templates/phpinfo.php.j2
+        dest: /var/www/html/myroot/phpinfo.php
+        owner: apache
+        group: apache
+      tags: copy
+
+    - name: start apache
+      systemd:
+        name: httpd
+        state: started
+        enabled: yes
+      tags: start
+
