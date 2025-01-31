@@ -1,0 +1,42 @@
+---
+
+- name: copy files using when
+  hosts: all
+  become: yes
+  gather_facts: true
+  
+  tasks:
+    - name: copy file to app1
+      copy:
+        src: /usr/src/sysops/blog.txt
+        dest: /opt/sysops
+        mode: 0777
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+#      when: ansible_facts['ansible_hostname'] == "stapp01"
+      when: ansible_hostname == "stapp01"
+      tags: cpapp1
+
+    - name: copy file app2
+      copy:
+        src: /usr/src/sysops/story.txt
+        dest: /opt/sysops
+        mode: 0777
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+      #when: ansible_facts['ansible_nodename'] == "stapp02"
+      when: ansible_hostname == "stapp02"
+      tags: cpapp2
+
+    - name: copy file app3
+      copy:
+        src: /usr/src/sysops/media.txt
+        dest: /opt/sysops
+        mode: 0777
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+      #when: ansible_facts['ansible_nodename'] == "stapp03"
+      when: ansible_hostname == "stapp03"
+      tags: cpapp3
+
+## ansible_node name is in ansible_facts docs but was failing checks as undefined
